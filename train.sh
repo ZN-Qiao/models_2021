@@ -14,3 +14,4 @@ module load cuda/101/toolkit/10.1.243
 CUDA_VISIBLE_DEVICES=0,1,2,3 nohup python3 ./main.py -a pynet50 ../places365_standard/
 
 
+CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a wide_resnet50_2 ../data/places/
