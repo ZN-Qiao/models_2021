@@ -381,5 +381,7 @@ def demo():
     net = wide_resnet50_2()
     y = net(torch.randn(2, 3, 224, 224))
     print(y.size())
+    from torchstat import stat
+    stat(net, (3, 224, 224))
 
 # demo()
