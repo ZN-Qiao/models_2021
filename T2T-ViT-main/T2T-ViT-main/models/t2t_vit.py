@@ -13,9 +13,9 @@ from timm.models.helpers import load_pretrained
 from timm.models.registry import register_model
 from timm.models.layers import trunc_normal_
 import numpy as np
-from .token_transformer import Token_transformer
-from .token_performer import Token_performer
-from .transformer_block import Block, get_sinusoid_encoding
+from token_transformer import Token_transformer
+from token_performer import Token_performer
+from transformer_block import Block, get_sinusoid_encoding
 
 def _cfg(url='', **kwargs):
     return {
@@ -82,18 +82,21 @@ class T2T_module(nn.Module):
     def forward(self, x):
         # step0: soft split
         x = self.soft_split0(x).transpose(1, 2)
-
         # iteration1: re-structurization/reconstruction
         x = self.attention1(x)
+
         B, new_HW, C = x.shape
         x = x.transpose(1,2).reshape(B, C, int(np.sqrt(new_HW)), int(np.sqrt(new_HW)))
+
         # iteration1: soft split
         x = self.soft_split1(x).transpose(1, 2)
 
         # iteration2: re-structurization/reconstruction
         x = self.attention2(x)
+
         B, new_HW, C = x.shape
         x = x.transpose(1, 2).reshape(B, C, int(np.sqrt(new_HW)), int(np.sqrt(new_HW)))
+
         # iteration2: soft split
         x = self.soft_split2(x).transpose(1, 2)
 
@@ -158,6 +161,7 @@ class T2T_ViT(nn.Module):
 
         cls_tokens = self.cls_token.expand(B, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
+
         x = x + self.pos_embed
         x = self.pos_drop(x)
 
@@ -294,3 +298,12 @@ def T2t_vit_14_wide(pretrained=False, **kwargs):
         load_pretrained(
             model, num_classes=model.num_classes, in_chans=kwargs.get('in_chans', 3))
     return model
+
+def demo():
+    net = T2t_vit_t_14(pretrained=False)
+    y = net(torch.randn(1, 3, 224, 224))
+    # print(y.size())
+    # from torchstat import stat
+    # stat(net, (3, 224, 224))
+
+demo()

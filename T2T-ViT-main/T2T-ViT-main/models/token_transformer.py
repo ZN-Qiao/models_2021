@@ -8,8 +8,7 @@ Take the standard Transformer as T2T Transformer
 """
 import torch.nn as nn
 from timm.models.layers import DropPath
-from .transformer_block import Mlp
-
+from transformer_block import Mlp
 class Attention(nn.Module):
     def __init__(self, dim, num_heads=8, in_dim = None, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0.):
         super().__init__()
@@ -25,15 +24,17 @@ class Attention(nn.Module):
 
     def forward(self, x):
         B, N, C = x.shape
-
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, self.in_dim).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
+
         attn = attn.softmax(dim=-1)
+
         attn = self.attn_drop(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(B, N, self.in_dim)
+
         x = self.proj(x)
         x = self.proj_drop(x)
 
@@ -56,5 +57,7 @@ class Token_transformer(nn.Module):
 
     def forward(self, x):
         x = self.attn(self.norm1(x))
+
         x = x + self.drop_path(self.mlp(self.norm2(x)))
+
         return x

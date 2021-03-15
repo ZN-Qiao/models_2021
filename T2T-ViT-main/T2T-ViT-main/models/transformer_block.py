@@ -23,9 +23,11 @@ class Mlp(nn.Module):
 
     def forward(self, x):
         x = self.fc1(x)
+
         x = self.act(x)
         x = self.drop(x)
         x = self.fc2(x)
+
         x = self.drop(x)
         return x
 
@@ -52,8 +54,11 @@ class Attention(nn.Module):
         attn = self.attn_drop(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(B, N, C)
+
         x = self.proj(x)
+
         x = self.proj_drop(x)
+
         return x
 
 class Block(nn.Module):
