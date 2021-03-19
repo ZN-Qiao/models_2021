@@ -31,3 +31,10 @@ CUDA_VISIBLE_DEVICES=0,1 nohup python3 ./main.py -a resnet50 -b 512 --resume ./c
 
 CUDA_VISIBLE_DEVICES=0,1 nohup python3 ./main.py -a resnet50 -b 512 ../imagenet &
 
+CUDA_VISIBLE_DEVICES=0,1 nohup python3 ./main.py -a resnet50 -b 512 ../data/imagenet &
+
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet50 --num_classes 1000 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../ImageNet/
+
+nohup python3 ./main.py -a resnet50 --num_classes 1000 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../data/imagenet &
+
