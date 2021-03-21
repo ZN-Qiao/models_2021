@@ -41,3 +41,5 @@ nohup python3 ./main.py -a resnet50 --num_classes 1000 --resume ./checkpoint/cp_
 CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../ImageNet/
 
 nohup python3 ./main_larger.py -a resnet101 ../data/places &
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../places365_standard/
