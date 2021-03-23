@@ -48,3 +48,22 @@ nohup python3 ./main.py -a resnet101 ../data/places &
 
 nohup python3 ./main_small.py -a resnet50 ../places365_standard &
 
+nohup python3 ./main_small.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../places365_standard &
+
+python3 ./main_blur.py -a resnet50 -e ../../data/imagenet
+
+python3 ./main_blur.py -a resnet50 -e ../../data/places
+
+
+
+
+
+
+
+
+
+
+
+
+
+
