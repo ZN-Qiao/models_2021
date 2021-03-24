@@ -54,6 +54,17 @@ python3 ./main_blur.py -a resnet50 -e ../../data/imagenet
 
 python3 ./main_blur.py -a resnet50 -e ../../data/places
 
+nohup python3 ./main.py -a resnet101 --resume ./checkpoint/cp_resnet101.pth.tar ../data/places &
+
+python3 ./main.py -a resnet50 --resume ./checkpoint/places.pth.tar ../data/places
+
+python3 ./main.py -a resnet50 -b 128 --lr 0.05 --resume ./checkpoint/places.pth.tar ../data/places
+
+python3 ./main_fft.py -a resnet50 -e ../../data/imagenet
+
+nohup python3 ./main.py -a resnet50 -b 128 --lr 0.05 ../data/places &
+
+
 
 
 
