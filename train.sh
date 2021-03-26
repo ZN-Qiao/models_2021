@@ -77,14 +77,17 @@ CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py -a PreActResNet50 
 
 CUDA_VISIBLE_DEVICES=4,5,6,7 python3 ./main_imagenet.py  ../../../data/places
 
-CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py  ../../../data/places &
+CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py  ../../../data/places/data100/ &
 
 python3 ./main_imagenet.py -a PreActResNet50 ../../../places365_standard
 
 python3 ./main.py -a PreActResNet50 ../../../places365_standard
 
+python3 ./main_imagenet.py -a PreActResNet50 ../../../imagenet
+data
+python3 ./main_imagenet.py  ../../data/imagenet/data100/
 
-
+python3 ./main.py  ../../data/places/data100/
 
 
 
