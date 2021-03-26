@@ -33,7 +33,6 @@ CUDA_VISIBLE_DEVICES=0,1 nohup python3 ./main.py -a resnet50 -b 512 ../imagenet 
 
 CUDA_VISIBLE_DEVICES=0,1 nohup python3 ./main.py -a resnet50 -b 512 ../data/imagenet &
 
-
 CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet50 --num_classes 1000 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../ImageNet/
 
 nohup python3 ./main.py -a resnet50 --num_classes 1000 --resume ./checkpoint/cp_resnet50.pth.tar --epochs 150 ../data/imagenet &
@@ -64,13 +63,25 @@ python3 ./main_fft.py -a resnet50 -e ../../data/imagenet
 
 nohup python3 ./main.py -a resnet50 -b 128 --lr 0.05 ../data/places &
 
+python3 ./main_fft.py -a resnet50 -e ../../imagenet
 
+python3 ./main_fft.py -a resnet50 -e --bw 30 --filter 1 ../../imagenet
 
+python3 ./main_blur.py -a resnet50 -e ../../places365_standard
 
+nohup python3 ./main.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places &
 
+CUDA_VISIBLE_DEVICES=0,1,2,3 nohup python3 ./main.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places &
 
+CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py -a PreActResNet50 ../../../data/places &
 
+CUDA_VISIBLE_DEVICES=4,5,6,7 python3 ./main_imagenet.py  ../../../data/places
 
+CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py  ../../../data/places &
+
+python3 ./main_imagenet.py -a PreActResNet50 ../../../places365_standard
+
+python3 ./main.py -a PreActResNet50 ../../../places365_standard
 
 
 
