@@ -84,11 +84,22 @@ python3 ./main_imagenet.py -a PreActResNet50 ../../../places365_standard
 python3 ./main.py -a PreActResNet50 ../../../places365_standard
 
 python3 ./main_imagenet.py -a PreActResNet50 ../../../imagenet
-data
+
 python3 ./main_imagenet.py  ../../data/imagenet/data100/
 
-python3 ./main.py  ../../data/places/data100/
+python3 ./main.py  ../../../data/places/data100/
 
+nohup python3 ./main.py ../../../data/places/data100/ &
 
+CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 main_imagenet.py -b 128 --lr 0.05 ../../../data/places/data100/ &
 
+nohup python3 ./main.py -a resnet50 ../../../data/places/data100/ &
+
+nohup python3 ./main.py -b 128 --lr 0.05 ../../../data/places/data100/ &
+
+CUDA_VISIBLE_DEVICES=4,5,6,7 nohup python3 ./main_imagenet.py  -a resnet50 ../../../data/places/data100/ &
+
+python3 ./main_blur.py -a resnet50 ../data/places365_standard
+
+python3 ./main.py -a resnet50 -e --resume ./checkpoint/best_cp_resnet50.pth.tar ../data/places365
 
