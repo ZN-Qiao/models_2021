@@ -132,8 +132,11 @@ def PreActResNet152(num_classes=1000):
 
 
 def test():
-    net = PreActResNet18(num_classes=1000)
+    net = PreActResNet50(num_classes=1000)
     y = net((torch.randn(1, 3, 224, 224)))
     print(y.size())
+
+    from torchstat import stat
+    stat(net, (3, 224, 224))
 
 # test()
