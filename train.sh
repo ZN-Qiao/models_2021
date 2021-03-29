@@ -111,14 +111,11 @@ nohup python3 ./main_imagenet.py -a resnet50 --num_classes 100 ../../../data/ima
 
 nohup python3 ./main.py -a resnet50 --num_classes 100 ../../../data/places/data100/ &
 
+CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7 nohup python3 ./main_imagenet.py -a resnet50 --num_classes 100 ../../../data/imagenet/data100/ &
 
+nohup python3 ./main_imagenet.py -a wide_resnet50_2 --num_classes 100 ../../../data/imagenet/data100/ &
 
-
-
-
-
-
-
+nohup python3 ./main.py -a wide_resnet50_2 --num_classes 100 ../../../data/places/data100/ &
 
 
 
