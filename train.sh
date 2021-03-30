@@ -117,7 +117,7 @@ nohup python3 ./main_imagenet.py -a wide_resnet50_2 --num_classes 100 ../../../d
 
 nohup python3 ./main.py -a wide_resnet50_2 --num_classes 100 ../../../data/places/data100/ &
 
-
+python3 ./main.py -a resnet50 --num_classes 100 ../../../data/places/data100/
 
 
 
