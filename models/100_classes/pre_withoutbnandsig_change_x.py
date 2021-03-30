@@ -39,7 +39,7 @@ class BasicBlock(nn.Module):
 
         out = F.relu(self.bn1(x))
 
-        shortcut = self.shortcut(out) if hasattr(self,
+        shortcut = self.shortcut(x) if hasattr(self,
                                                  'shortcut') else x
 
         out = self.conv1(out)
@@ -72,7 +72,7 @@ class Bottleneck(nn.Module):
 
         out = F.relu(self.bn1(x))
 
-        shortcut = self.shortcut(out) if hasattr(self,
+        shortcut = self.shortcut(x) if hasattr(self,
                                                  'shortcut') else x
 
         out = self.conv1(out)
@@ -186,7 +186,7 @@ def resnet34(pretrained=False, weight=1.0, **kwargs):
     return model
 
 
-def resnet50(pretrained=False, weight=0.5, **kwargs):
+def resnet50(pretrained=False, weight=0.25, **kwargs):
     """Constructs a ResNet-50 model.
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
