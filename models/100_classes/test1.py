@@ -32,6 +32,7 @@ class BasicBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.conv2 = conv3x3(planes, planes)
         self.bn2 = nn.BatchNorm2d(planes)
+        # self.downsample = downsample
         self.stride = stride
 
         if stride != 1 or inplanes != self.expansion * planes:
@@ -39,16 +40,18 @@ class BasicBlock(nn.Module):
                 nn.Conv2d(inplanes, self.expansion * planes, kernel_size=1, stride=stride, bias=False)
             )
 
-
     def forward(self, x):
 
         out = F.relu(self.bn1(x))
 
-        shortcut = self.shortcut(x) if hasattr(self,
+        shortcut = self.shortcut(out) if hasattr(self,
                                                  'shortcut') else x
 
         out = self.conv1(out)
         out = self.conv2(F.relu(self.bn2(out)))
+
+        # if self.downsample is not None:
+        #     shortcut = self.downsample(x)
 
         out += shortcut
 
@@ -67,6 +70,7 @@ class Bottleneck(nn.Module):
         self.conv3 = conv1x1(planes, planes * self.expansion)
         self.bn3 = nn.BatchNorm2d(planes)
         self.relu = nn.ReLU(inplace=True)
+        # self.downsample = downsample
         self.stride = stride
 
         if stride != 1 or inplanes != self.expansion * planes:
@@ -78,13 +82,16 @@ class Bottleneck(nn.Module):
 
         out = F.relu(self.bn1(x))
 
-        shortcut = self.shortcut(x) if hasattr(self,
+        shortcut = self.shortcut(out) if hasattr(self,
                                                  'shortcut') else x
 
         out = self.conv1(out)
         out = self.conv2(F.relu(self.bn2(out)))
 
         out = self.conv3(F.relu(self.bn3(out)))
+
+        # if self.downsample is not None:
+        #     shortcut = self.downsample(x)
 
         out += shortcut
 
@@ -109,7 +116,7 @@ class ResNet(nn.Module):
         # self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
         # self.bn1 = nn.BatchNorm2d(64)
 
-        self.layer1 = self._make_layer(block, int(64*weight), layers[0])
+        self.layer1 = self._make_layer(block, int(64*weight), layers[0], stride=1)
         self.layer2 = self._make_layer(block, int(128*weight), layers[1], stride=2)
         self.layer3 = self._make_layer(block, int(256*weight), layers[2], stride=2)
         self.layer4 = self._make_layer(block, int(512*weight), layers[3], stride=2)
@@ -133,14 +140,14 @@ class ResNet(nn.Module):
                 elif isinstance(m, BasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
 
-    def _make_layer(self, block, planes, blocks, stride=1):
+    def _make_layer(self, block, planes, num_blocks, stride):
+        strides = [stride] + [1] * (num_blocks - 1)
         layers = []
-        layers.append(block(self.inplanes, planes, stride))
-        self.inplanes = planes * block.expansion
-        for _ in range(1, blocks):
-            layers.append(block(self.inplanes, planes))
-
+        for stride in strides:
+            layers.append(block(self.inplanes, planes, stride))
+            self.inplanes = planes * block.expansion
         return nn.Sequential(*layers)
+
 
     def forward(self, x):
         # For ImageNet

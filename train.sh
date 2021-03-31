@@ -121,6 +121,8 @@ python3 ./main.py -a resnet50 --num_classes 100 ../../../data/places/data100/
 
 python3 ./main100.py -a resnet50 --num_classes 100 ../../../data/places/data100/
 
+nohup python3 ./main100.py -a resnet50 --num_classes 100 ../../../data/places/data100/ &
 
+nohup python3 ./main.py -a resnet101 --num_classes 365 /../data/places/&
 
-
+nohup python3 ./main100.py -a resnet50 --num_classes 100 ../../../data/imagenet/data100/ &

@@ -32,8 +32,12 @@ class BasicBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.conv2 = conv3x3(planes, planes)
         self.bn2 = nn.BatchNorm2d(planes)
-        self.downsample = downsample
         self.stride = stride
+
+        if stride != 1 or inplanes != self.expansion * planes:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(inplanes, self.expansion * planes, kernel_size=1, stride=stride, bias=False)
+            )
 
     def forward(self, x):
 
@@ -44,9 +48,6 @@ class BasicBlock(nn.Module):
 
         out = self.conv1(out)
         out = self.conv2(F.relu(self.bn2(out)))
-
-        if self.downsample is not None:
-            shortcut = self.downsample(x)
 
         out += shortcut
 
@@ -65,8 +66,12 @@ class Bottleneck(nn.Module):
         self.conv3 = conv1x1(planes, planes * self.expansion)
         self.bn3 = nn.BatchNorm2d(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.downsample = downsample
         self.stride = stride
+
+        if stride != 1 or inplanes != self.expansion * planes:
+            self.shortcut = nn.Sequential(
+                nn.Conv2d(inplanes, self.expansion * planes, kernel_size=1, stride=stride, bias=False)
+            )
 
     def forward(self, x):
 
@@ -79,9 +84,6 @@ class Bottleneck(nn.Module):
         out = self.conv2(F.relu(self.bn2(out)))
 
         out = self.conv3(F.relu(self.bn3(out)))
-
-        if self.downsample is not None:
-            shortcut = self.downsample(x)
 
         out += shortcut
 
@@ -131,15 +133,8 @@ class ResNet(nn.Module):
                     nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(self, block, planes, blocks, stride=1):
-        downsample = None
-        if stride != 1 or self.inplanes != planes * block.expansion:
-            downsample = nn.Sequential(
-                conv1x1(self.inplanes, planes * block.expansion, stride),
-                nn.BatchNorm2d(planes * block.expansion),
-            )
-
         layers = []
-        layers.append(block(self.inplanes, planes, stride, downsample))
+        layers.append(block(self.inplanes, planes, stride))
         self.inplanes = planes * block.expansion
         for _ in range(1, blocks):
             layers.append(block(self.inplanes, planes))
