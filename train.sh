@@ -135,4 +135,5 @@ nohup python3 ./main100.py -a resnet50 --num_classes 100 --resume ./checkpoint/c
 
 nohup python3 ./main.py -a resnet101  -b 128 --lr 0.05 --resume ./checkpoint/cp_resnet101.pth.tar ../data/places &
 
+nohup python3 ./main_larger.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places &
 
