@@ -138,3 +138,8 @@ nohup python3 ./main.py -a resnet101  -b 128 --lr 0.05 --resume ./checkpoint/cp_
 nohup python3 ./main_larger.py -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places &
 
 nohup python3 ./main_larger.py -a resnet50 -b 128 --lr 0.05 --resume ./checkpoint/best_cp_resnet50.pth.tar ../data/places &
+
+CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7 nohup python3 ./main.py  -a resnet50 ../data/places/ &
+
+CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7 python3  ./main.py  -a resnet50../data/places/
+

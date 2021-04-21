@@ -259,7 +259,7 @@ def demo():
         net = resnet50(num_classes=1000)
         y = net(torch.randn(2, 3, 224,224))
         print(y.size())
-        from torchstat import stat
-        stat(net, (3, 224, 224))
+        # from torchstat import stat
+        # stat(net, (3, 224, 224))
 
-# demo()
+demo()
