@@ -145,4 +145,4 @@ CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7 python3  ./main.py  -a resnet50../data/places
 
 python3 ./main.py  -a resnet50 ../data/places/
 
-nohup python3 ./main.py  -a resnet50 ../data/places/ &
+nohup python3 ./main.py  -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places/ &
