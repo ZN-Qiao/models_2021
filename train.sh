@@ -7,9 +7,6 @@
 #SBATCH -N 1
 #SBATCH --gres=gpu:4
 
-module load python
-module load pytorch/gpu-1.6.0
-module load cuda/102/toolkit/10.2.89  
 
 CUDA_VISIBLE_DEVICES=1 nohup python3 ./main.py -a resnet50 -b 512 --resume ./checkpoint/cp_resnet50.pth.tar ../../Datasets/ImageNet &
 
@@ -146,3 +143,5 @@ CUDA_VISIBLE_DEVICES=1,2,3,4,5,6,7 python3  ./main.py  -a resnet50../data/places
 python3 ./main.py  -a resnet50 ../data/places/
 
 nohup python3 ./main.py  -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places/ &
+
+nohup python3 ./main.py  -a resnet50 --epochs 100 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places/ &

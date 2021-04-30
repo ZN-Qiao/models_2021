@@ -262,4 +262,4 @@ def demo():
         # from torchstat import stat
         # stat(net, (3, 224, 224))
 
-demo()
+# demo()
