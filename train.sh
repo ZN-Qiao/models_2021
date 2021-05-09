@@ -147,3 +147,5 @@ nohup python3 ./main.py  -a resnet50 --resume ./checkpoint/cp_resnet50.pth.tar .
 nohup python3 ./main.py  -a resnet50 --epochs 100 --resume ./checkpoint/cp_resnet50.pth.tar ../data/places/ &
 
 nohup python3 ./main.py  -a resnet50 ../data/places/data100 &
+
+nohup python3 ./main.py  -a resnet50 ../data/places &
