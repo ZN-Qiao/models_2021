@@ -11,6 +11,23 @@ import time
 
 __all__ = ['resnet18', 'resnet50', 'resnet101']
 
+class SELayer(nn.Module):
+    def __init__(self, channel, reduction = 16):
+        super(SELayer, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc       = nn.Sequential(
+                        nn.Linear(channel, channel // reduction),
+                        nn.ReLU(inplace = True),
+                        nn.Linear(channel // reduction, channel),
+                        nn.Sigmoid()
+                )
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)
+        y = self.fc(y).view(b, c, 1, 1)
+        return x * y
+
 class shnet(nn.Module):
     def __init__(self, channel):
         super(shnet, self).__init__()
@@ -68,6 +85,7 @@ class BasicBlock(nn.Module):
         self.bn2 = nn.BatchNorm2d(planes)
         self.downsample = downsample
         self.stride = stride
+        self.se  = SELayer(planes)
 
     def forward(self, x):
         identity = x
@@ -78,6 +96,7 @@ class BasicBlock(nn.Module):
 
         out = self.conv2(out)
         out = self.bn2(out)
+        out = self.se(out)
 
         if self.downsample is not None:
             identity = self.downsample(x)
@@ -102,6 +121,7 @@ class Bottleneck(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
+        self.se = SELayer(planes * self.expansion)
 
     def forward(self, x):
         identity = x
@@ -118,6 +138,7 @@ class Bottleneck(nn.Module):
         out = self.conv3(out)
         out = self.bn3(out)
         # print("conv3 size: ", out.size())
+        out = self.se(out)
 
         if self.downsample is not None:
             identity = self.downsample(x)

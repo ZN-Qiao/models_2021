@@ -10,4 +10,4 @@
 
 
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet50 ../places365_standard/
+CUDA_VISIBLE_DEVICES=0,1,2,3 python3 ./main.py -a resnet101 ../places365_standard/
