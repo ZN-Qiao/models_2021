@@ -138,7 +138,7 @@ class Bottleneck(nn.Module):
         out = self.conv3(out)
         out = self.bn3(out)
         # print("conv3 size: ", out.size())
-        out = self.se(out)
+        # out = self.se(out)
 
         if self.downsample is not None:
             identity = self.downsample(x)

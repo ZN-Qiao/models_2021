@@ -76,7 +76,7 @@ class Bottleneck(nn.Module):
         # Both self.conv2 and self.downsample layers downsample the input when stride != 1
         self.conv1 = conv1x1(inplanes, width)
         self.bn1 = norm_layer(width)
-        self.conv2 = conv3x3(width, width, stride, groups)
+        self.conv2 = conv3x3(width, width, 1, groups)
         self.bn2 = norm_layer(width)
         self.conv3 = conv1x1(width, planes * self.expansion)
         self.bn3 = norm_layer(planes * self.expansion)
@@ -86,12 +86,18 @@ class Bottleneck(nn.Module):
 
     def forward(self, x):
         identity = x
+        b, c, h, w = x.size()
+        gap = nn.AdaptiveAvgPool2d(h//2)
 
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
 
         out = self.conv2(out)
+
+        if self.downsample is not None:
+            out = gap(out)
+
         out = self.bn2(out)
         out = self.relu(out)
 
@@ -100,6 +106,7 @@ class Bottleneck(nn.Module):
 
         if self.downsample is not None:
             identity = self.downsample(x)
+            identity = gap(identity)
 
         out += identity
         out = self.relu(out)
@@ -153,7 +160,8 @@ class ResNet(nn.Module):
         downsample = None
         if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
-                conv1x1(self.inplanes, planes * block.expansion, stride),
+                conv1x1(self.inplanes, planes * block.expansion, 2),
+                nn.AdaptiveAvgPool2d(2),
                 norm_layer(planes * block.expansion),
             )
 
