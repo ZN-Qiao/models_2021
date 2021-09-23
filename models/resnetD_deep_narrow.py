@@ -64,19 +64,19 @@ class Bottleneck(nn.Module):
 
     def forward(self, x):
         identity = x
-        print("send in size:", identity.size())
+        # print("send in size:", identity.size())
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
-        print("conv1 size: ", out.size())
+        # print("conv1 size: ", out.size())
         out = self.conv2(out)
         out = self.bn2(out)
         out = self.relu(out)
-        print("conv2 size: ", out.size())
+        # print("conv2 size: ", out.size())
 
         out = self.conv3(out)
         out = self.bn3(out)
-        print("conv3 size: ", out.size())
+        # print("conv3 size: ", out.size())
 
         if self.downsample is not None:
             identity = self.downsample(x)
