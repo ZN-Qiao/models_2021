@@ -255,10 +255,11 @@ def resnext101_32x8d(pretrained=False, **kwargs):
 
 def demo():
     for i in range(1):
-        net = resnet101(num_classes=1000)
+        net = resnet101(num_classes=365)
         y = net(torch.randn(2, 3, 224,224))
         print(y.size())
         from torchstat import stat
         stat(net, (3, 224, 224))
 
-demo()
+# demo()
+ß
